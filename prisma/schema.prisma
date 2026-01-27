@@ -12,9 +12,12 @@ datasource db {
 model Document {
   id        String   @id @default(cuid())
   title     String   @default("Untitled")
+  userId    String   // Add this line
   blocks    Block[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  @@index([userId]) // Add this for faster queries
 }
 
 model Block {
