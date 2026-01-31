@@ -18,6 +18,15 @@ export async function POST(request: Request) {
     data: {
       title: title || 'Untitled',
       userId: user.id,
+      blocks: {
+        create: [
+          {
+            type: 'text',
+            content: '',
+            order: 0,
+          },
+        ],
+      },
     },
   })
 

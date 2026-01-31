@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { PrismaClient } from '@prisma/client'
 import { notFound } from 'next/navigation'
 import { EditableTitle } from './editable-title'
+import { BlocksManager } from './blocks-manager'  // Add this
 
 const prisma = new PrismaClient()
 
@@ -40,20 +41,14 @@ export default async function DocumentPage({
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto">
-        <EditableTitle initialTitle={document.title} documentId={document.id} /> 
+        <EditableTitle initialTitle={document.title} documentId={document.id} />
         
-        {document.blocks.length === 0 ? (
-          <p className="text-gray-500 mt-8">No content yet. Start typing!</p>
-        ) : (
-          <div className="space-y-4 mt-8">
-            {document.blocks.map((block) => (
-              <div key={block.id} className="p-4 border rounded">
-                <p className="text-sm text-gray-500 mb-2">Type: {block.type}</p>
-                <p>{block.content}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="mt-8">
+          <BlocksManager 
+            documentId={document.id} 
+            initialBlocks={document.blocks} 
+          />
+        </div>
       </div>
     </div>
   )
