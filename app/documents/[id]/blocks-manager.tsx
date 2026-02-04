@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { BlockEditor } from './block-editor'
 
 type Block = {
@@ -17,6 +17,7 @@ type BlocksManagerProps = {
 
 export function BlocksManager({ documentId, initialBlocks }: BlocksManagerProps) {
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks)
+  const [focusBlockId, setFocusBlockId] = useState<string | null>(null)
 
   const createBlock = async (afterOrder: number) => {
     const response = await fetch(`/api/documents/${documentId}/blocks`, {
@@ -38,6 +39,9 @@ export function BlocksManager({ documentId, initialBlocks }: BlocksManagerProps)
       )
       return [...updated, newBlock].sort((a, b) => a.order - b.order)
     })
+
+    // Focus the new block
+    setFocusBlockId(newBlock.id)
   }
 
   const deleteBlock = async (blockId: string) => {
@@ -67,7 +71,7 @@ export function BlocksManager({ documentId, initialBlocks }: BlocksManagerProps)
   }
 
   return (
-    <div className="space-y-1">  {/* Changed from space-y-2 to space-y-1 for tighter spacing */}
+    <div className="space-y-1">
       {blocks.map((block) => (
         <BlockEditor
           key={block.id}
@@ -77,6 +81,8 @@ export function BlocksManager({ documentId, initialBlocks }: BlocksManagerProps)
           onEnter={() => createBlock(block.order)}
           onBackspace={() => deleteBlock(block.id)}
           onUpdate={(content) => updateBlock(block.id, content)}
+          shouldFocus={focusBlockId === block.id}
+          onFocused={() => setFocusBlockId(null)}
         />
       ))}
     </div>
