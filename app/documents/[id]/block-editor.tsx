@@ -42,7 +42,11 @@ export function BlockEditor({
     },
     onSelectionUpdate: ({ editor }) => {
       const { from, to } = editor.state.selection
-      setShowToolbar(from !== to)
+      const hasSelection = from !== to
+      setShowToolbar(hasSelection)
+    },
+    onBlur: () => {
+      setShowToolbar(false)
     },
     editorProps: {
       attributes: {
@@ -103,27 +107,27 @@ export function BlockEditor({
           onMouseDown={(e) => e.preventDefault()}
         >
           <button
-            onClick={() => editor.chain().focus().toggleBold().run()}
+            onClick={() => editor?.chain().focus().toggleBold().run()}
             className={`px-3 py-1 rounded hover:bg-gray-700 font-bold ${
-              editor.isActive('bold') ? 'bg-gray-700' : ''
+              editor?.isActive('bold') ? 'bg-gray-700' : ''
             }`}
           >
             B
           </button>
           
           <button
-            onClick={() => editor.chain().focus().toggleItalic().run()}
+            onClick={() => editor?.chain().focus().toggleItalic().run()}
             className={`px-3 py-1 rounded hover:bg-gray-700 italic ${
-              editor.isActive('italic') ? 'bg-gray-700' : ''
+              editor?.isActive('italic') ? 'bg-gray-700' : ''
             }`}
           >
             I
           </button>
           
           <button
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            onClick={() => editor?.chain().focus().toggleUnderline().run()}
             className={`px-3 py-1 rounded hover:bg-gray-700 underline ${
-              editor.isActive('underline') ? 'bg-gray-700' : ''
+              editor?.isActive('underline') ? 'bg-gray-700' : ''
             }`}
           >
             U
@@ -132,27 +136,27 @@ export function BlockEditor({
           <div className="w-px bg-gray-600 mx-1" />
 
           <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
             className={`px-3 py-1 rounded hover:bg-gray-700 text-sm ${
-              editor.isActive('heading', { level: 1 }) ? 'bg-gray-700' : ''
+              editor?.isActive('heading', { level: 1 }) ? 'bg-gray-700' : ''
             }`}
           >
             H1
           </button>
 
           <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
             className={`px-3 py-1 rounded hover:bg-gray-700 text-sm ${
-              editor.isActive('heading', { level: 2 }) ? 'bg-gray-700' : ''
+              editor?.isActive('heading', { level: 2 }) ? 'bg-gray-700' : ''
             }`}
           >
             H2
           </button>
 
           <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
             className={`px-3 py-1 rounded hover:bg-gray-700 text-sm ${
-              editor.isActive('heading', { level: 3 }) ? 'bg-gray-700' : ''
+              editor?.isActive('heading', { level: 3 }) ? 'bg-gray-700' : ''
             }`}
           >
             H3
