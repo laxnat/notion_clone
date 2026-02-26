@@ -25,10 +25,10 @@ export default async function DocumentsPage() {
   })
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen bg-[#191919] p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">All Documents</h1>
+          <h1 className="text-4xl font-display">All Documents</h1>
           <CreateDocumentButton />
         </div>
         

@@ -39,7 +39,7 @@ export default async function DocumentPage({
   }
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen bg-secondary p-8">
       <div className="max-w-4xl mx-auto">
         <EditableTitle initialTitle={document.title} documentId={document.id} />
         
