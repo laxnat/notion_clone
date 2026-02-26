@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PrismaClient } from '@prisma/client'
 import { Sidebar } from '../components/sidebar'
+import { NavButtons } from '../components/nav-buttons'
 
 const prisma = new PrismaClient()
 
@@ -34,6 +35,7 @@ export default async function DocumentsLayout({
         userEmail={user.email || ''}
       />
       <main className="flex-1 overflow-auto">
+        <NavButtons />
         {children}
       </main>
     </div>
