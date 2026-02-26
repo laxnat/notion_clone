@@ -21,7 +21,7 @@
   --color-highlight: var(--highlight);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-ui: var(--font-rajdhani);
+  --font-ui: var(--font-barlow-condensed);
   --font-display: var(--font-bebas-neue);
 }
 
