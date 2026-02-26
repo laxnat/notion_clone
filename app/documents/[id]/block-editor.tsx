@@ -3,7 +3,7 @@
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 type BlockEditorProps = {
   blockId: string
@@ -28,6 +28,7 @@ export function BlockEditor({
 }: BlockEditorProps) {
   const [showToolbar, setShowToolbar] = useState(false)
   const [isUserFocused, setIsUserFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -91,6 +92,7 @@ export function BlockEditor({
   
     if (shouldFocus) {
       editor.commands.focus();
+      containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
   
     return () => {
@@ -100,7 +102,7 @@ export function BlockEditor({
   }, [editor, shouldFocus, onFocused]);
   
   return (
-    <div className="block-editor relative">
+    <div ref={containerRef} className="block-editor relative">
       {showToolbar && (
         <div 
           className="absolute -top-12 left-0 bg-gray-800 text-white rounded-lg shadow-lg p-1 flex gap-1 z-50"

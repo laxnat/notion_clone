@@ -47,11 +47,18 @@ export function BlocksManager({ documentId, initialBlocks }: BlocksManagerProps)
   const deleteBlock = async (blockId: string) => {
     if (blocks.length === 1) return // Don't delete last block
 
+    const blockIndex = blocks.findIndex((b) => b.id === blockId)
+    const prevBlock = blocks[blockIndex - 1]
+
     await fetch(`/api/documents/${documentId}/blocks/${blockId}`, {
       method: 'DELETE',
     })
 
     setBlocks((prev) => prev.filter((b) => b.id !== blockId))
+
+    if (prevBlock) {
+      setFocusBlockId(prevBlock.id)
+    }
   }
 
   const updateBlock = async (blockId: string, content: string) => {
