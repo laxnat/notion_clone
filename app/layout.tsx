@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Barlow_Condensed, Bebas_Neue } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${barlowCondensed.variable} ${bebasNeue.variable} antialiased`}
       >
+        <NextTopLoader color="#ffc54a" shadow="0 0 10px #ffc54a,0 0 5px #00bbfa" height={3} showSpinner={false} />
         {children}
       </body>
     </html>
