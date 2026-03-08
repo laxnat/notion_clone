@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ documentId: string }> }
 ) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -15,7 +15,7 @@ export async function PATCH(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { id } = await params
+  const { documentId: id } = await params
   const { title } = await request.json()
 
   // Check if document belongs to user
@@ -33,4 +33,28 @@ export async function PATCH(
   })
 
   return NextResponse.json(updated)
+}
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ documentId: string }> }
+) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const { documentId: id } = await params
+
+  const document = await prisma.document.findUnique({ where: { id } })
+
+  if (!document || document.userId !== user.id) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  await prisma.document.delete({ where: { id } })
+
+  return NextResponse.json({ success: true })
 }
