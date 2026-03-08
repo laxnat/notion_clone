@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, ChevronLeft, ChevronRight, FileText, House, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { DocumentMenu } from './document-menu'
 
 type Document = {
   id: string
@@ -23,6 +24,7 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
   const router = useRouter()
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
   const sidebarRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -61,7 +63,7 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
 
   return (
     <div
-      className="w-56 bg-tertiary border-r border-white/5 flex flex-col h-screen relative group/sidebar"
+      className="w-64 bg-tertiary border-r border-white/5 flex flex-col h-screen relative group/sidebar"
     >
       {/* Collapse button */}
       <button
@@ -74,7 +76,7 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
 
       {/* Header */}
       <div className="px-4 pt-5 pb-4 border-b border-white/5 flex items-center justify-between">
-        <Link href="/" className="font-display text-4xl text-white hover:text-primary transition-colors">
+        <Link href="/" className="font-display text-6xl text-white hover:text-primary transition-colors">
           aegis
         </Link>
 
@@ -85,22 +87,22 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
             className="flex items-center gap-1.5"
             title={userEmail}
           >
-            <div className="w-7 h-7 bg-primary/20 border border-primary/40 rounded-full flex items-center justify-center text-primary font-display text-sm">
+            <div className="w-10 h-10 bg-primary/20 border border-primary/40 rounded-full flex items-center justify-center text-primary font-display text-lg">
               {userEmail[0].toUpperCase()}
             </div>
-            <ChevronDown size={12} className={`text-white/30 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+            <ChevronDown size={15} className={`text-white/30 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
           </button>
 
           {showDropdown && (
             <div className="absolute top-full right-0 mt-2 w-52 bg-secondary border border-white/10 shadow-xl z-50 py-1">
-              <p className="px-3 py-2 font-ui text-xs text-white/40 truncate border-b border-white/5">
+              <p className="px-3 py-2 font-ui text-lg text-white/40 truncate border-b border-white/5">
                 {userEmail}
               </p>
               <button
                 onClick={() => { handleLogout(); setShowDropdown(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 font-ui text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors text-left"
+                className="w-full flex items-center gap-2 px-3 py-2 font-ui text-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors text-left"
               >
-                <LogOut size={13} />
+                <LogOut size={15} />
                 Log out
               </button>
             </div>
@@ -112,20 +114,20 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
       <div className="px-2 py-3">
         <Link
           href="/documents"
-          className={`flex items-center gap-2.5 px-3 py-2 font-ui text-base rounded transition-colors ${
+          className={`flex items-center gap-2.5 px-3 py-2 font-ui text-xl rounded transition-colors ${
             pathname === '/documents'
               ? 'text-white bg-white/8'
               : 'text-white/50 hover:text-white hover:bg-white/5'
           }`}
         >
-          <House size={16} />
+          <House size={20} />
           Home
         </Link>
       </div>
 
       {/* Recents */}
       <div className="flex-1 overflow-y-auto px-2 pb-4">
-        <p className="px-3 py-2 font-ui text-xs text-white/25 tracking-widest uppercase">
+        <p className="px-3 py-2 font-ui text-lg text-white tracking-widest uppercase">
           Recents
         </p>
         <div className="space-y-0.5">
@@ -135,19 +137,27 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
             documents.map((doc) => {
               const isActive = pathname === `/documents/${doc.id}`
               return (
-                <Link
-                  key={doc.id}
-                  href={`/documents/${doc.id}`}
-                  title={doc.title}
-                  className={`flex items-center gap-2.5 px-3 py-2 font-ui text-base rounded transition-colors ${
-                    isActive
-                      ? 'text-white bg-white/8'
-                      : 'text-white/50 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <FileText size={15} className="shrink-0" />
-                  <span className="truncate">{doc.title}</span>
-                </Link>
+                <div key={doc.id} className="relative group/doc">
+                  <Link
+                    href={`/documents/${doc.id}`}
+                    title={doc.title}
+                    className={`flex items-center gap-2.5 px-3 py-2 pr-8 font-ui text-xl rounded transition-colors ${
+                      isActive
+                        ? 'text-white bg-white/8'
+                        : 'text-white/50 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <FileText size={20} className="shrink-0" />
+                    <span className="truncate">{doc.title}</span>
+                  </Link>
+                  <div className={`absolute right-1 top-1/2 -translate-y-1/2 transition-opacity ${openMenuId === doc.id ? 'opacity-100' : 'opacity-0 group-hover/doc:opacity-100'}`}>
+                    <DocumentMenu
+                      documentId={doc.id}
+                      afterDelete={() => router.refresh()}
+                      onOpenChange={(o) => setOpenMenuId(o ? doc.id : null)}
+                    />
+                  </div>
+                </div>
               )
             })
           )}

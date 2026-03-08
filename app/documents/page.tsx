@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PrismaClient, Document } from '@prisma/client'
-import Link from 'next/link'
 import { CreateDocumentButton } from './create-document-button'
+import { DocumentListItem } from './document-list-item'
 import { FileText } from 'lucide-react'
 
 const prisma = new PrismaClient()
@@ -58,21 +58,12 @@ export default async function DocumentsPage() {
         ) : (
           <div className="divide-y divide-white/5">
             {documents.map((doc: Document) => (
-              <Link
+              <DocumentListItem
                 key={doc.id}
-                href={`/documents/${doc.id}`}
-                className="flex items-center justify-between py-4 px-3 group hover:bg-white/5 transition-colors -mx-3"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <FileText size={18} className="text-primary/40 shrink-0 group-hover:text-primary transition-colors" />
-                  <span className="font-ui text-lg text-white truncate group-hover:text-primary transition-colors">
-                    {doc.title}
-                  </span>
-                </div>
-                <span className="font-ui text-sm text-white/30 shrink-0 ml-4 group-hover:text-primary/60 transition-colors">
-                  {relativeTime(doc.updatedAt)}
-                </span>
-              </Link>
+                id={doc.id}
+                title={doc.title}
+                relativeTime={relativeTime(doc.updatedAt)}
+              />
             ))}
           </div>
         )}
