@@ -153,6 +153,7 @@ export function Sidebar({ documents, userEmail }: SidebarProps) {
                   <div className={`absolute right-1 top-1/2 -translate-y-1/2 transition-opacity ${openMenuId === doc.id ? 'opacity-100' : 'opacity-0 group-hover/doc:opacity-100'}`}>
                     <DocumentMenu
                       documentId={doc.id}
+                      title={doc.title}
                       afterDelete={() => router.refresh()}
                       onOpenChange={(o) => setOpenMenuId(o ? doc.id : null)}
                     />
