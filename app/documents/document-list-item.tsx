@@ -35,6 +35,7 @@ export function DocumentListItem({ id, title, relativeTime }: Props) {
       <div className={`absolute right-3 transition-opacity ${menuOpen ? 'opacity-100' : 'opacity-0 group-hover/doc:opacity-100'}`}>
         <DocumentMenu
           documentId={id}
+          title={title}
           afterDelete={() => router.refresh()}
           onOpenChange={setMenuOpen}
         />
