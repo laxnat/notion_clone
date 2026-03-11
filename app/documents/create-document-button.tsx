@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 
-export function CreateDocumentButton() {
+export function CreateDocumentButton({ folderId }: { folderId?: string } = {}) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -14,7 +14,7 @@ export function CreateDocumentButton() {
     const response = await fetch('/api/documents', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'Untitled' }),
+      body: JSON.stringify({ title: 'Untitled', folderId: folderId ?? null }),
     })
 
     const document = await response.json()

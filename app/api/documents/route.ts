@@ -12,12 +12,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { title } = await request.json()
+  const { title, folderId } = await request.json()
 
   const document = await prisma.document.create({
     data: {
       title: title || 'Untitled',
       userId: user.id,
+      folderId: folderId || null,
       blocks: {
         create: [
           {
