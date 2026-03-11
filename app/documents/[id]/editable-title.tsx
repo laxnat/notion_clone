@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 type EditableTitleProps = {
@@ -12,6 +12,11 @@ export function EditableTitle({ initialTitle, documentId }: EditableTitleProps) 
   const [title, setTitle] = useState(initialTitle)
   const [isEditing, setIsEditing] = useState(false)
   const router = useRouter()
+
+  // Sync when the server delivers a new title (e.g. renamed from sidebar)
+  useEffect(() => {
+    setTitle(initialTitle)
+  }, [initialTitle])
 
   const handleSave = async () => {
     setIsEditing(false)
