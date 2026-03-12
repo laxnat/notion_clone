@@ -38,9 +38,13 @@ export default async function DocumentsLayout({
         folders={folders}
         userEmail={user.email || ''}
       />
-      <main className="flex-1 overflow-auto">
-        <NavButtons />
-        {children}
+      <main className="flex-1 flex flex-col overflow-hidden bg-secondary">
+        <div className="sticky top-0 z-10 shrink-0">
+          <NavButtons />
+        </div>
+        <div className="flex-1 overflow-auto">
+          {children}
+        </div>
       </main>
     </div>
   )
