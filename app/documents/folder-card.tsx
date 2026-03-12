@@ -81,13 +81,10 @@ export function FolderCard({ id, name, docCount, relativeTime }: Props) {
         href={`/documents/folders/${id}`}
         className={`flex flex-col gap-3 p-4 flex-1 ${renaming ? 'pointer-events-none' : ''}`}
       >
-        {/* Icon */}
         {hovered
           ? <FolderOpen size={28} className="text-primary/70 shrink-0" />
           : <Folder size={28} className="text-primary/40 shrink-0" />
         }
-
-        {/* Name */}
         {renaming ? (
           <input
             ref={inputRef}
@@ -104,13 +101,9 @@ export function FolderCard({ id, name, docCount, relativeTime }: Props) {
         ) : (
           <p className="font-ui text-xl text-white truncate">{name}</p>
         )}
-
-        {/* Meta */}
-        <div className="mt-auto">
-          <p className="font-ui text-sm text-white/30">
-            {docCount} {docCount === 1 ? 'document' : 'documents'}
-          </p>
-          <p className="font-ui text-xs text-white/20 mt-0.5">{relativeTime}</p>
+        <div className="mt-auto flex items-end justify-between gap-2">
+          <p className="font-ui text-xs text-white/20">{relativeTime}</p>
+          <p className="font-ui text-xs text-white/30 shrink-0">{docCount}</p>
         </div>
       </Link>
 
