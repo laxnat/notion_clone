@@ -6,11 +6,12 @@ import { useState, useRef, useEffect } from 'react'
 import {
   ChevronDown, ChevronLeft, ChevronRight,
   FileText, Folder, FolderOpen, FolderPlus,
-  House, LogOut, MoreHorizontal, Pencil, Trash2,
+  House, LogOut, MoreHorizontal, Pencil, Search, Trash2,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { DocumentMenu } from './document-menu'
+import { SearchPalette } from './search-palette'
 import { createPortal } from 'react-dom'
 
 type FolderData = {
@@ -144,6 +145,8 @@ export function Sidebar({ folders: initFolders, documents: initDocs, userEmail }
   const [dragOver, setDragOver] = useState<string | 'root' | null>(null)
   const dragItem = useRef<{ id: string; type: 'folder' | 'doc' } | null>(null)
 
+  const [searchOpen, setSearchOpen] = useState(false)
+
   // Sync with server-refreshed props
   useEffect(() => { setFolders(initFolders) }, [initFolders])
   useEffect(() => { setDocs(initDocs) }, [initDocs])
@@ -160,6 +163,17 @@ export function Sidebar({ folders: initFolders, documents: initDocs, userEmail }
     }
     document.addEventListener('mousedown', handleOut)
     return () => document.removeEventListener('mousedown', handleOut)
+  }, [])
+
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(v => !v)
+      }
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
   const handleLogout = async () => {
@@ -456,6 +470,14 @@ export function Sidebar({ folders: initFolders, documents: initDocs, userEmail }
           <House size={20} />
           Home
         </Link>
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="w-full flex items-center gap-2.5 px-3 py-2 font-ui text-xl text-white/50 hover:text-white hover:bg-white/5 rounded transition-colors"
+        >
+          <Search size={20} />
+          Search
+          <kbd className="ml-auto font-ui text-xs text-white/20 border border-white/10 rounded px-1.5 py-0.5">⌘K</kbd>
+        </button>
       </div>
 
       {/* Files tree */}
@@ -493,6 +515,13 @@ export function Sidebar({ folders: initFolders, documents: initDocs, userEmail }
           )}
         </div>
       </div>
+
+      <SearchPalette
+        folders={folders}
+        docs={docs}
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
     </div>
   )
 }
